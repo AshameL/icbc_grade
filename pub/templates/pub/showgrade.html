@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分数展示</title>
+</head>
+<body>
+{% if pre > 1 %}
+    <a href="{% url 'showgrade' pre %}">上一位</a>
+{% endif %}
+--
+{% if last != -1 %}
+    <a href="{% url 'showgrade' last %}">下一位</a>
+{% endif %}
+打分的列表用ajax 轮调
+计算平均分（自动计算）<br>
+{% for i in judge %}
+    <p>{{ i.username }}：<input type="text" readonly id="grade{{ i.id }}" value="{{ i.grade }}"></p>
+{% endfor %}
+<p>去掉最高最低分后的平均分：<input type="text" id="ave"></p>
+</body>
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        t1 = setInterval(function () {
+            ajax_search({{ id }})
+        }, 1000);
+
+        function ajax_search(id) {
+            // 查询该选手相关的分数
+            $.ajax({
+                async: true,
+                type: 'GET',
+                url: 'ajax_search',
+                data: {"emp_id": id},
+
+                success: function (data) {
+
+                    var data = JSON.parse(JSON.stringify(data));
+                    for (var i = 0; i < data['idlist'].length; i++) {
+                        $('#grade' + data['idlist'][i]).val(data['gradelist'][i]);
+                    }
+                    var count ={{ judge.count }};
+                    console.log(data['idlist'].length);
+                    if (count == data['idlist'].length && $('#ave').val() == '') {
+                        //计算平均数
+                        ajax_ave(id);
+                    }
+                }
+            });
+        };
+
+        function ajax_ave(id) {
+            $.ajax({
+                async: true,
+                type: 'GET',
+                url: 'ajax_ave',
+                data: {'id': id},
+                success: function (data) {
+                    $('#ave').val(data);
+                    clearInterval(t1);
+                }
+            });
+
+        };
+
+    })
+
+
+</script>
+</html>
