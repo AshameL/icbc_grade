@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.conf.urls import url
 from judge import views as jud
 from pub import views as p
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
 
     url(r'^$', p.index, name='index'),
     url(r'^admin', admin.site.urls),
+    url(r'^favicon.ico$', RedirectView.as_view(url=r'static/favicon.ico')),
 
     url(r'^judge', jud.index, name='judge'),
     url(r'^ajax_submit', jud.ajax_submit),
@@ -31,4 +33,8 @@ urlpatterns = [
     # 查看数据
     url(r'^showgrade/ajax_search', p.ajax_search, name='ajax_search'),
     url(r'^showgrade/ajax_ave', p.ajax_ave, name='ajax_ave'),
+    url(r'^list',p.list,name='list'),
+    url(r'^sort',p.sort,name='sort'),
+    # 测试母版url
+    url(r'^base', p.base, name='base'),
 ]

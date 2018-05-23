@@ -1,10 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>选手列表</title>
-</head>
-<body>
+{% extends 'pub/base.html' %}
+{% load static %}
+{% block title %}
+    选手列表—
+{% endblock %}
+{% block css %}
+    <link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+{% block main_title %}
+    选手列表
+{% endblock %}
+{% block main_content %}
+    <div class="shortcuts">
+        {% for i in emp %}
+            <a href="{% url 'showgrade' i.id %}">
+                <div class="shortcut">
+                    <span class="shortcut-label">{{ i.num }}号选手</span>
+                    <span class="shortcut-label">{{ i.name }}</span>
 
-</body>
-</html>
+                </div>
+            </a>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

@@ -56,3 +56,17 @@ def ajax_ave(request):
             sum = sum + i.grade
         ave = sum / len(list)
     return HttpResponse(ave)
+
+
+def list(request):
+    emp = employee.objects.all().order_by('num', 'id')
+    return render(request, 'pub/list.html', {'emp': emp})
+
+
+def sort(request):
+    emp = employee.objects.all().order_by('totalgrade', 'ave_grade')
+    return render(request, 'pub/sort.html', {'emp': emp})
+
+
+def base(request):
+    return render(request, 'base.html')
