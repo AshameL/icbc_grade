@@ -15,6 +15,15 @@
     <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
+    <style type="text/css">
+        body{
+            background-image: url("{% static 'background.jpg' %}");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            min-height: 750px;
+        }
+
+    </style>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -26,7 +35,6 @@
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
-
             <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -34,11 +42,21 @@
             </a>
 
             <a class="brand" href="{% url 'index' %}">
-                ICBC工商银行长春分行
+                中国工商银行长春分行
             </a>
-
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="{% url 'login' %}" class="dropdown-toggle">
+                            <i class="icon-user"></i>
+                            评委登录
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div> <!-- /container -->
     </div> <!-- /navbar-inner -->
+
 </div> <!-- /navbar -->
 
 
@@ -73,14 +91,13 @@
 
 
 <div class="main">
-
+    {#    <img class="bkimg" src="{% static 'background.jpg' %} ">#}
     <div class="main-inner">
 
         <div class="container">
-            <img src="{% static 'background.jpg' %} " width="100%" height="auto" style="opacity: 0.4">
 
+            {#style="background-image: url('{% static 'background.jpg' %}') ;background-size:contain ;width: 100%;height: 100%"#}
         </div>
-
 
     </div> <!-- /main-inner -->
 

@@ -1,34 +1,166 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <title>ICBC 招聘</title>
+    <meta charset="utf-8">
+    <title>评委打分</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" type="text/css"/>
+    <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet" type="text/css"/>
+
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
+
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'css/pages/signin.css' %}" rel="stylesheet" type="text/css">
+
 </head>
+
 <body>
 
-显示选手列表，每个选手
-选手姓名编号--文本框提交-
---提交前确定-
-<br>
-{% for i in emp %}
-    <p>{{ i.num }}号选手__{{ i.name }}：<input type="text" name="grade{{ i.id }} " id="txt_grade{{ i.id }}"
-                                           value="{{ i.grade }}">
-        {% if i.grade %}
-            <button disabled="disabled">已经打分</button>
-        {% else %}
-            <button onclick="grade({{ i.id }})" id="btn{{ i.id }}">提交评分</button>
-        {% endif %}
-    </p>
-{% endfor %}
-</body>
-<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
-<script>
-    function grade(id) {
-        var grade = $("#txt_grade" + id.toString()).val();
-        //验证数字格式
+<div class="navbar navbar-fixed-top">
 
-        var ival = parseInt(grade)
-        if (isNaN(ival)) {
+    <div class="navbar-inner">
+
+        <div class="container">
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
+            <a class="brand" href="">
+                中国工商银行长春分行
+            </a>
+
+            <div class="nav-collapse">
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="{% url 'logout' %}" class="dropdown-toggle">
+                            <i class="icon-user"></i>
+                            退出登录
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div> <!-- /container -->
+
+
+    </div> <!-- /navbar-inner -->
+
+</div> <!-- /navbar -->
+
+
+<div class="account-container register">
+
+    <div class="content clearfix">
+        {% if timeout %}
+
+            <form>
+
+                <h1>打分暂停</h1>
+
+                <div class="login-fields">
+
+                    <p>&nbsp;</p>
+
+                    <div class="field">
+                        <input type="text" id="grade" name="grade" value="" placeholder="" class="login" readonly/>
+                    </div> <!-- /field -->
+
+                </div> <!-- /login-fields -->
+
+                <div class="login-actions">
+
+                    <button class="button btn btn-danger btn-large" disabled>打分</button>
+
+                </div> <!-- .actions -->
+
+            </form>
+        {% else %}
+            <form>
+
+                <h1>{{ emp.num }}号选手得分</h1>
+
+                <div class="login-fields">
+
+                    <p>{{ emp.num }}号选手{{ emp.name }}</p>
+
+                    <div class="field">
+                        {% if grade %}
+                            <input type="text" readonly id="grade" name="grade" value="{{ grade }}" placeholder=""
+                                   class="login"/>
+                        {% else %}
+                            <input type="text" id="grade" name="grade" value="" placeholder="" class="login"/>
+                        {% endif %}
+                    </div> <!-- /field -->
+
+                </div> <!-- /login-fields -->
+
+                <div class="login-actions">
+                    {% if grade %}
+                        <button class="button btn btn-danger btn-large" disabled id="submitgrade">已评分</button>
+
+                    {% else %}
+                        <button class="button btn btn-danger btn-large" id="submitgrade" onclick="tsetgrade()">
+                            打分
+                        </button>
+                    {% endif %}
+
+                </div> <!-- .actions -->
+
+            </form>
+        {% endif %}
+
+
+    </div> <!-- /content -->
+
+</div> <!-- /account-container -->
+
+
+<script src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+
+<script src="{% static 'js/signin.js' %}"></script>
+<script>
+    $(function () {
+        setInterval(function () {
+            needreload()
+        }, 1000)
+
+        function needreload() {
+            $.ajax({
+                async: true,
+                type: 'GET',
+                url: 'ajax_reload',
+                data: {'page': {{ONPAGE}}},
+                success: function (d) {
+                    console.log(d);
+                    if (d == 'true') {
+                        window.location.reload()
+                    }
+
+                }
+            })
+        }
+
+
+    })
+
+    function tsetgrade() {
+
+        var id ={{ ONPAGE }};
+        var grade = $("#grade").val();
+        //验证数字格式
+        var judgeid ={{ request.session.judgerid }};
+        var te = /^[0-9]+(\.[0-9]+)?$/;
+
+        if (!te.test(grade)) {
             return alert("请输入正确数字格式！" + grade)
         }
         //ajax提交
@@ -36,7 +168,7 @@
             async: true,
             type: 'GET',
             url: 'ajax_submit',
-            data: {"emp_id": id, "jud_id": 1, "grade": grade},
+            data: {"emp_id": id, "jud_id": judgeid, "grade": grade},
             success: function (data) {
                 afterGrade(id)
             },
@@ -47,10 +179,13 @@
     };
 
     function afterGrade(id) {
-        $("#btn" + id.toString()).attr('disabled', true);
-        $("#btn" + id.toString()).html('已经打分')
+        $("#submitgrade").attr('disabled', true);
+        $("#submitgrade").html('已评分')
 
-        $("#txt_grade" + id.toString()).attr('readOnly', true);
+        $("#grade").attr('readOnly', true);
     }
+
 </script>
+</body>
+
 </html>

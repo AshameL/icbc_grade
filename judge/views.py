@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from pub.models import employee, jud_emp
-from django.http import HttpResponse
+from .models import user
+from django.http import HttpResponse, HttpResponseRedirect
 import logging
-
+from django.conf import settings
 
 # Create your views here.
 
-
+'''
 # 评委打分界面，获取选手个数
 def index(request):
     emp = employee.objects.all().order_by('id')
@@ -20,6 +21,21 @@ def index(request):
     return render(request, 'index.html', {'emp': emp})
 
     # ajax 进行打分提交
+'''
+
+
+def index(request):
+    if request.method == 'GET':
+        if settings.ONPAGE == 0:
+            return render(request, 'index.html', {'timeout': '评分暂停'})
+        else:
+            judgerid = request.session['judgerid']
+            emp = employee.objects.get(id=settings.ONPAGE)
+            try:
+                je = jud_emp.objects.get(jud_id_id=judgerid, emp_id=emp)
+                return render(request, 'index.html', dict(emp=emp, grade=je.grade))
+            except:
+                return render(request, 'index.html', {'emp': emp})
 
 
 def ajax_submit(request):
@@ -42,3 +58,69 @@ def ajax_submit(request):
                 return HttpResponse('评委打分失败，请联系管理员')
         logger.debug('评委打分成功！')
     return HttpResponse('评委打分成功！')
+
+
+def ajax_reload(request):
+    logging.warning('[reload]')
+    page = request.GET['page']
+    print(settings.ONPAGE, page)
+    print(type(settings.ONPAGE), type(page))
+    if int(settings.ONPAGE) == int(page):
+        print('不会刷新')
+        return HttpResponse('false')
+    print('刷新')
+    return HttpResponse('true')
+
+
+# 登录
+def login(request):
+    if request.method == 'POST':
+        logging.debug('登录验证')
+        username = request.POST['username']
+        password = request.POST['password']
+        try:
+            judger = user.objects.get(username=username, password=password)
+            judger.online = 1
+            judger.save()
+            logging.debug('————评委用户online状态：1')
+            request.session['judgerid'] = judger.id
+            request.session['judgername'] = judger.name
+            logging.debug('————登录成功')
+            return HttpResponseRedirect('/judge/')
+        except:
+            logging.debug('————用户名密码错误')
+            return render(request, 'login.html', {'error': '用户名密码错误'})
+    return render(request, 'login.html')
+
+
+def logout(request):
+    id = request.session['judgerid']
+    judger = user.objects.get(id=id)
+    judger.online = 0
+    judger.save()
+    logging.debug('————评委用户online状态：0')
+    del request.session['judgerid']
+    del request.session['judgername']
+    logging.debug('————评委用户session清空')
+
+    return HttpResponseRedirect('/login/')
+
+
+''''# websocket
+@require_websocket
+def start_server_script(request):
+    # print('is websocket:'+ request.is_websocket())
+    # for message in request.websocket:
+    #     print(str(message,encoding = "utf-8"))
+    #     sendmes = '我是服务器!'
+    #     b = bytes(sendmes, encoding = "utf8")
+    #
+    #     request.websocket.send(b)
+    a = '1'
+    while request.websocket.read():
+        print('读取中')
+        t = onpage.objects.get(id=1)
+        if a != t.thispage:
+            print('改变了')
+
+'''

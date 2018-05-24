@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ICBC 招聘</title>
+</head>
+<body>
+{{ request.session.judgername }}
+{{ request.session.judgerid }}
+<div class="nav-collapse">
+    <ul class="nav pull-right">
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-user"></i>
+                评委登录
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="javascript:;">退出登录</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+显示选手列表，每个选手
+选手姓名编号--文本框提交-
+--提交前确定-
+<br>
+{% for i in emp %}
+    <p>{{ i.num }}号选手__{{ i.name }}：<input type="text" name="grade{{ i.id }} " id="txt_grade{{ i.id }}"
+                                           value="{{ i.grade }}">
+        {% if i.grade %}
+            <button disabled="disabled">已经打分</button>
+        {% else %}
+            <button onclick="grade({{ i.id }})" id="btn{{ i.id }}">提交评分</button>
+        {% endif %}
+    </p>
+{% endfor %}
+</body>
+<script src="http://apps.bdimg.com/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+    function grade(id) {
+        var grade = $("#txt_grade" + id.toString()).val();
+        //验证数字格式
+        var judgeid ={{ request.session.judgerid }};
+        var ival = parseInt(grade)
+        if (isNaN(ival)) {
+            return alert("请输入正确数字格式！" + grade)
+        }
+        //ajax提交
+        $.ajax({
+            async: true,
+            type: 'GET',
+            url: 'ajax_submit',
+            data: {"emp_id": id, "jud_id": judgeid, "grade": grade},
+            success: function (data) {
+                afterGrade(id)
+            },
+            error: function (data) {
+                alert(data)
+            }
+        });
+    };
+
+    function afterGrade(id) {
+        $("#btn" + id.toString()).attr('disabled', true);
+        $("#btn" + id.toString()).html('已经打分')
+
+        $("#txt_grade" + id.toString()).attr('readOnly', true);
+    }
+</script>
+</html>
