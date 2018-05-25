@@ -42,7 +42,7 @@ urlpatterns = [
     # 导出数据
     url(r'^excel$', p.excel_export, name='excel'),
     # 测试母版url
-    # url(r'^base', p.base, name='base'),
+    url(r'^base', p.base, name='base'),
     # url(r'start_server_script/$', jud.start_server_script)
 
 ]

@@ -7,4 +7,4 @@ class user(models.Model):
     num = models.IntegerField(null=True, blank=True, unique=True)
     name = models.CharField(max_length=30, null=True, blank=True)
     password = models.CharField(max_length=30, null=True)
-    online = models.BooleanField()
+    online = models.BinaryField()
