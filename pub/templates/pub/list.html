@@ -6,21 +6,32 @@
 {% block css %}
     <link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
 {% endblock %}
-{% block main_title %}
-    选手列表
+{% block login %}
 {% endblock %}
-{% block main_content %}
-    <div class="shortcuts">
-        {% for i in emp %}
-            <a href="{% url 'showgrade' i.id %}">
-                <div class="shortcut">
-                    <span class="shortcut-label">{{ i.num }}号选手</span>
-                    <span class="shortcut-label">{{ i.name }}</span>
+{% block row %}
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-header">
+                <h3>
+                    选手列表
+                </h3>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+                <div class="shortcuts">
+                    {% for i in emp %}
+                        <a href="{% url 'showgrade' i.id %}">
+                            <div class="shortcut">
+                                <span class="shortcut-label">{{ i.num }}号选手</span>
+                                <span class="shortcut-label">{{ i.name }}</span>
+
+                            </div>
+                        </a>
+                    {% endfor %}
 
                 </div>
-            </a>
-        {% endfor %}
+            </div>
 
+        </div>
     </div>
-
 {% endblock %}

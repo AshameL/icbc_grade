@@ -1,172 +1,104 @@
+{% extends 'pub/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title> 评委打分</title>
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootstrap-responsive.min.css' %}" rel="stylesheet">
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
-    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
+{% block title %}
+    评委打分
+{% endblock %}
+{{% block css %}
     <style type="text/css">
-        body {
-            background-image: url("{% static 'background.jpg' %}");
+
+        .widget-content2 {
+            padding: 20px 15px 15px;
+
             background-size: 100% 100%;
-            background-repeat: no-repeat;
-            min-height: 750px;
+            background: rgb(249, 246, 241) no-repeat;
+
+            border: 0px solid #D5D5D5;
+            mini-height: 300px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        .widget-content3 {
+            padding: 20px 15px 15px;
+
+            background: rgba(255, 255, 255, 0);
+
+            border: 0px solid #D5D5D5;
+
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        #ave {
+            font-family: "Times New Roman";
+            font-size: 100px;
+            color: #cb1a15;
         }
     </style>
-    {% block css %}
-        <link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
-    {% endblock %}
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-</head>
 
-<body>
-
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+    <link href="{% static 'css/pages/dashboard.css' %}" rel="stylesheet">
+{% endblock %}
+{% block login %}
+    <li class="dropdown">
+        {% if pre > 0 %}
+            <a href="{% url 'showgrade' pre %}" class="dropdown-toggle">
+                <i class="icon-arrow-left"></i>
             </a>
+        {% endif %}
 
-            <a class="brand" href="{% url 'index' %}">
-                中国工商银行长春分行
+    </li>
+    <li class="dropdown">
+        {% if last != -1 %}
+            <a href="{% url 'showgrade' last %}" class="dropdown-toggle">
+                <i class="icon-arrow-right"></i>
             </a>
+        {% endif %}
 
-        </div> <!-- /container -->
-    </div> <!-- /navbar-inner -->
-</div> <!-- /navbar -->
-
-
-<div class="subnavbar">
-
-    <div class="subnavbar-inner">
-
-        <div class="container">
-
-            <ul class="mainnav">
-
-                <li>
-                    <a href="{% url 'list' %}">
-                        <i class="icon-dashboard"></i>
-                        <span>评委打分</span>
-                    </a>
-                </li>
-
-
-                <li>
-                    <a href="{% url 'sort' %}">
-                        <i class="icon-list-ol"></i>
-                        <span>选手排名</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{% url 'list' %}">
-                        <i class=" icon-list-alt"></i>
-                        <span>选手列表</span>
-                    </a>
-                </li>
-                <li>
-                    {% if pre > 0 %}
-                        <a href="{% url 'showgrade' pre %}">
-                            <i class="icon-arrow-left"></i>
-                            <span>上一位</span>
-                        </a>
-                    {% endif %}
-                </li>
-                <li>
-                    {% if last != -1 %}
-                        <a href="{% url 'showgrade' last %}">
-                            <i class="icon-arrow-right"></i>
-                            <span>下一位</span>
-                        </a>
-                    {% endif %}
-                </li>
-
-            </ul>
-
-        </div> <!-- /container -->
-
-    </div> <!-- /subnavbar-inner -->
-
-</div> <!-- /subnavbar -->
-
-
-<div class="main">
-
-    <div class="main-inner">
-
-        <div class="container">
-            <div class="row ">
-                <div class="span9">
-                    <div class="widget ">
-                        <!-- /widget-header -->
-                        <div class="widget-content">
-                            <div class="shortcuts">
-                                {% for i in judge %}
-                                    <div class="shortcut">
-                                        <span class="shortcut-label">{{ i.name }}</span>
-                                        <i>
-                                            <input type=""  id="grade{{ i.id }}" value="{{ i.grade }}"
-                                                   style="width: 80%">
-                                        </i>
-                                    </div>
-                                {% endfor %}
-                            </div>
+    </li>
+{% endblock %}
+{% block row %}
+    <div class="span9">
+        <div class="widget ">
+            <!-- /widget-header -->
+            <div class="widget-content3">
+                <div class="shortcuts">
+                    {% for i in judge %}
+                        <div class="shortcut">
+                            <span class="shortcut-label">{{ i.name }}</span>
+                            <i>
+                                <input type="" id="grade{{ i.id }}" value="{{ i.grade }}"
+                                       style="width: 80%">
+                            </i>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
-                <div class="span3">
-                    <div class="widget ">
-                        <!-- /widget-header -->
-                        <div class="widget-content">
-                            <div class="shortcuts">
-                                去掉最高最低分后的平均分：<input type="text" id="ave" >
-                            </div>
-                        </div>
-                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="span3">
+        <div class="widget ">
+            <!-- /widget-header -->
+            <div class="widget-content2">
+                <div class="shortcuts">
+                    <h1 style="color: #e40e17">{{ emp.name }}业绩展示得分</h1>
+
+                    <img src="{% static 'grade.png' %}" width="90%">
+                    <div><span id='ave'>{% if emp.ave_grade %}{{ emp.ave_grade }}
+                    {% endif %}</span></div>
                 </div>
-
-            </div> <!-- /row -->
-
-        </div> <!-- /container -->
-
-    </div> <!-- /main-inner -->
-
-</div> <!-- /main -->
-
-
-<!-- Le javascript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="{% static 'js/jquery-1.7.2.min.js' %}"></script>
-
-<script src="{% static 'js/bootstrap.js' %}"></script>
-<script src="{% static  'js/base.js' %}"></script>
-<script src="{% static  'js/faq.js' %}"></script>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 {% block script %}
     <script>
 
         $(function () {
             t1 = setInterval(function () {
                 ajax_search({{ id }})
-            }, 1000);
+            }, 2000);
 
             function ajax_search(id) {
                 // 查询该选手相关的分数
@@ -184,7 +116,7 @@
                         }
                         var count ={{ judge.count }};
                         {#console.log(data['idlist'].length);#}
-                        if (count == data['idlist'].length && $('#ave').val() == '') {
+                        if (count == data['idlist'].length) {
                             //计算平均数
                             ajax_ave(id);
                         }
@@ -199,7 +131,7 @@
                     url: 'ajax_ave',
                     data: {'id': id},
                     success: function (data) {
-                        $('#ave').val(data);
+                        $('#ave').html(data);
                         clearInterval(t1);
                     }
                 });
@@ -211,7 +143,3 @@
 
     </script>
 {% endblock %}
-
-</body>
-
-</html>

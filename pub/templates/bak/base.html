@@ -37,40 +37,51 @@
     <div class="navbar-inner">
         <div class="container">
 
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+
             <a class="brand" href="{% url 'index' %}">
                 中国工商银行长春分行
             </a>
-            <div class="nav-collapse">
-                <ul class="nav pull-right">
 
-                    <li class="dropdown">
-                        <a href="{% url 'list' %}" class="dropdown-toggle">
-                            <i class="icon-dashboard"></i>
-                            评委打分
-                        </a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="{% url 'sort' %}" class="dropdown-toggle">
-                            <i class="icon-list-ol"></i>
-                            选手排名
-                        </a>
-                    </li>
-                    {% block login %}
-                        <li class="dropdown">
-                            <a href="{% url 'login' %}" class="dropdown-toggle">
-                                <i class="icon-user"></i>
-                                评委登录
-                            </a>
-                        </li>
-                    {% endblock %}
-                </ul>
-            </div>
         </div> <!-- /container -->
     </div> <!-- /navbar-inner -->
 </div> <!-- /navbar -->
 
 
 <div class="subnavbar">
+
+    <div class="subnavbar-inner">
+
+        <div class="container">
+
+            <ul class="mainnav">
+
+                <li>
+                    <a href="{% url 'list' %}">
+                        <i class="icon-dashboard"></i>
+                        <span>评委打分</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="{% url 'sort' %}">
+                        <i class="icon-list-ol"></i>
+                        <span>选手排名</span>
+                    </a>
+                </li>
+                {% block nav %}
+
+                {% endblock %}
+            </ul>
+
+        </div> <!-- /container -->
+
+    </div> <!-- /subnavbar-inner -->
 
 </div> <!-- /subnavbar -->
 
@@ -81,37 +92,31 @@
 
         <div class="container">
             <div class="row ">
-                {% block row %}
-                    <div class="span12">
-                        <div class="widget">
-                            <div class="widget-header">
+                <div class="span12">
+                    <div class="widget {% block widgetname %}{% endblock %}">
+                        <div class="widget-header">
 
-                                <h3>
-                                    母版
-
-                                </h3>
-                            </div>
-                            <!-- /widget-header -->
-                            <div class="widget-content">
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-
-                            </div>
-
+                            <h3>{% block main_title %}
+                                母版
+                            {% endblock %}
+                            </h3>
                         </div>
+                        <!-- /widget-header -->
+                        <div class="widget-content">
+                            {% block main_content %}<p>模板内容</p>
+                                <p>模板内容</p><p>模板内容</p><p>模板内容</p><p>模板内容</p><p>模板内容</p><p>模板内容</p>
+                            {% endblock %}
+                        </div>
+
                     </div>
-                {% endblock %}
+                </div>
             </div>
 
         </div> <!-- /row -->
 
+    </div> <!-- /container -->
 
-    </div> <!-- /main-inner -->
+</div> <!-- /main-inner -->
 
 </div> <!-- /main -->
 

@@ -5,7 +5,7 @@ from django.dispatch import receiver
 # Create your models here.
 class employee(models.Model):
     name = models.CharField(max_length=30)
-    num = models.IntegerField(null=True)
+    num = models.IntegerField(null=True,unique=True)
     ave_grade = models.FloatField(null=True,blank=True)
 
     papergrade = models.FloatField(null=True,blank=True)

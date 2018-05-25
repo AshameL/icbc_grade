@@ -35,13 +35,14 @@
             </a>
 
             <a class="brand" href="">
-                中国工商银行长春分行
+                {{ request.session.judgername }},欢迎您！
             </a>
 
             <div class="nav-collapse">
                 <ul class="nav pull-right">
                     <li class="dropdown">
                         <a href="{% url 'logout' %}" class="dropdown-toggle">
+
                             <i class="icon-user"></i>
                             退出登录
                         </a>
@@ -131,14 +132,14 @@
     $(function () {
         setInterval(function () {
             needreload()
-        }, 1000)
+        }, 5000)
 
         function needreload() {
             $.ajax({
                 async: true,
                 type: 'GET',
                 url: 'ajax_reload',
-                data: {'page': {{ONPAGE}}},
+                data: {'page': {{ ONPAGE }}},
                 success: function (d) {
                     console.log(d);
                     if (d == 'true') {
@@ -153,6 +154,9 @@
     })
 
     function tsetgrade() {
+        if (!confirm('评分后将不能修改，请确认！')) {
+            return;
+        }
 
         var id ={{ ONPAGE }};
         var grade = $("#grade").val();

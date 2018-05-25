@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}{% endblock %}工商银行长春分行</title>
+    <title>工商银行长春分行</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,17 +14,16 @@
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
     <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
     <style type="text/css">
-        body {
+        body{
             background-image: url("{% static 'background.jpg' %}");
             background-size: 100% 100%;
             background-repeat: no-repeat;
             min-height: 750px;
         }
-    </style>
-    {% block css %}
 
-    {% endblock %}
+    </style>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -42,74 +41,58 @@
             </a>
             <div class="nav-collapse">
                 <ul class="nav pull-right">
-
                     <li class="dropdown">
-                        <a href="{% url 'list' %}" class="dropdown-toggle">
-                            <i class="icon-dashboard"></i>
-                            评委打分
+                        <a href="{% url 'login' %}" class="dropdown-toggle">
+                            <i class="icon-user"></i>
+                            评委登录
                         </a>
                     </li>
-                    <li class="dropdown">
-                        <a href="{% url 'sort' %}" class="dropdown-toggle">
-                            <i class="icon-list-ol"></i>
-                            选手排名
-                        </a>
-                    </li>
-                    {% block login %}
-                        <li class="dropdown">
-                            <a href="{% url 'login' %}" class="dropdown-toggle">
-                                <i class="icon-user"></i>
-                                评委登录
-                            </a>
-                        </li>
-                    {% endblock %}
                 </ul>
             </div>
         </div> <!-- /container -->
     </div> <!-- /navbar-inner -->
+
 </div> <!-- /navbar -->
 
 
 <div class="subnavbar">
 
+    <div class="subnavbar-inner">
+
+        <div class="container">
+
+            <ul class="mainnav">
+
+                <li>
+                    <a href="{% url 'list' %}">
+                        <i class="icon-dashboard"></i>
+                        <span>评委打分</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'sort' %}">
+                        <i class="icon-list-ol"></i>
+                        <span>选手排名</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </div> <!-- /container -->
+
+    </div> <!-- /subnavbar-inner -->
+
 </div> <!-- /subnavbar -->
 
 
 <div class="main">
-
+    {#    <img class="bkimg" src="{% static 'background.jpg' %} ">#}
     <div class="main-inner">
 
         <div class="container">
-            <div class="row ">
-                {% block row %}
-                    <div class="span12">
-                        <div class="widget">
-                            <div class="widget-header">
 
-                                <h3>
-                                    母版
-
-                                </h3>
-                            </div>
-                            <!-- /widget-header -->
-                            <div class="widget-content">
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-                                <p>模板内容</p>
-
-                            </div>
-
-                        </div>
-                    </div>
-                {% endblock %}
-            </div>
-
-        </div> <!-- /row -->
-
+            {#style="background-image: url('{% static 'background.jpg' %}') ;background-size:contain ;width: 100%;height: 100%"#}
+        </div>
 
     </div> <!-- /main-inner -->
 
@@ -124,8 +107,7 @@
 <script src="{% static 'js/bootstrap.js' %}"></script>
 <script src="{% static  'js/base.js' %}"></script>
 <script src="{% static  'js/faq.js' %}"></script>
-{% block script %}
-{% endblock %}
+
 
 </body>
 
