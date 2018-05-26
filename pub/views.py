@@ -30,7 +30,7 @@ def showgrade(request, id):
     pre = id - 1
     last = id + 1
     if last > emp.count():
-        last = -1
+        last = 99
     # 修改ONPAGE
     emp = employee.objects.get(id=id)
     settings.ONPAGE = int(id)
@@ -54,26 +54,30 @@ def ajax_ave(request):
     id = request.GET['id']
     # 查看ave是否存在
     emp = employee.objects.get(id=id)
-    if emp.ave_grade is not None:
-        # 存在则取出，返回
-        # 若不存在进行计算，写入
-        ave = emp.ave_grade
+    # if (emp.ave_grade is not None) or(emp.ave_grade == 0):
+    # 存在则取出，返回
+    # 若不存在进行计算，写入
+    #    ave = emp.ave_grade
+    # else:
+    list = jud_emp.objects.filter(emp_id_id=id).order_by('grade')
+    sum = 0
+    if len(list) > 2:
+        for i in range(1, len(list) - 1):
+            sum = sum + list[i].grade
+        ave = sum / (len(list) - 2)
     else:
-        list = jud_emp.objects.filter(emp_id_id=id).order_by('grade')
-        sum = 0
-
-        if len(list) > 2:
-            for i in range(1, len(list) - 1):
-                sum = sum + list[i].grade
-            ave = sum / (len(list) - 2)
-        else:
-            for i in list:
-                sum = sum + i.grade
-            ave = sum / len(list)
-        emp = employee.objects.get(id=id)
-        emp.ave_grade = ave
-        emp.save()
-    return HttpResponse(ave)
+        for i in list:
+            sum = sum + i.grade
+        ave = round(sum / len(list), 2)
+    ave = round(ave, 2)
+    emp = employee.objects.get(id=id)
+    emp.ave_grade = ave
+    emp.save()
+    minn = list[0].grade
+    maxn = list[len(list)-1].grade
+    data = {'ave': ave, 'max': maxn, 'min': minn}
+    print(data)
+    return JsonResponse(data)
 
 
 def list(request):
@@ -86,7 +90,7 @@ def sort(request):
     emp = employee.objects.all()
     for i in emp:
         if i.ave_grade is not None and i.papergrade is not None:
-            i.totalgrade = i.ave_grade * 0.7 + i.papergrade * 0.3
+            i.totalgrade = float(i.ave_grade) * 0.7 + float(i.papergrade) * 0.3
             i.totalgrade = round(i.totalgrade, 2)
             i.save()
     emp = employee.objects.all().order_by('-totalgrade', '-papergrade')
@@ -147,3 +151,12 @@ def excel_export(request):
     response['Content-Disposition'] = 'attachment; filename=grade.xls'
     response.write(sio.getvalue())
     return response
+
+
+def showall(request, id, last):
+    emp = employee.objects.get(id=id)
+    if emp.ave_grade is not None and emp.totalgrade is not None:
+        emp.totalgrade = emp.ave_grade * 0.7 + emp.papergrade * 0.3
+        emp.save()
+    last = int(last)
+    return render(request, 'pub/showAll.html', {'id': id, 'last': last, 'emp': emp})

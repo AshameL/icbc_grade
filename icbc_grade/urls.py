@@ -38,13 +38,9 @@ urlpatterns = [
     url(r'^showgrade/ajax_ave', p.ajax_ave, name='ajax_ave'),
     url(r'^list', p.list, name='list'),
     url(r'^sort', p.sort, name='sort'),
-
+    url(r'^showall/(\d+)/(\d+)', p.showall, name='showall'),
     # 导出数据
     url(r'^excel$', p.excel_export, name='excel'),
-    # 测试母版url
-    url(r'^base', p.base, name='base'),
-    # url(r'start_server_script/$', jud.start_server_script)
-
 ]
 handler403 = jud.permission_denied
 handler404 = jud.page_not_found

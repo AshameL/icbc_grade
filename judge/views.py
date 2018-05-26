@@ -75,14 +75,23 @@ def login(request):
         logging.debug('登录验证')
         username = request.POST['username']
         password = request.POST['password']
+        print(username, '+', password)
         try:
-            judger = user.objects.get(username=username, password=password)
-            judger.online = 1
-            judger.save()
-            logging.debug('————评委用户online状态：1')
-            request.session['judgerid'] = judger.id
-            request.session['judgername'] = judger.name
+            judger1 = user.objects.get(username=username, password=password)
+
+            judger1.online = 1
+            print(type(judger1.online))
+            try:
+                judger1.save()
+            except :
+                print('save')
+            request.session['judgerid'] = judger1.id
+            print('session id:',request.session['judgerid'] )
+            print(username, '+', password)
+
+            request.session['judgername'] = judger1.name
             logging.debug('————登录成功')
+            print(username, '::', password)
             return HttpResponseRedirect('/judge/')
         except:
             logging.debug('————用户名密码错误')
@@ -121,6 +130,7 @@ def start_server_script(request):
             print('改变了')
 
 '''
+
 
 def page_not_found(request):
     return render(request, '404.html')

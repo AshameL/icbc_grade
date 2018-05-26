@@ -1,0 +1,94 @@
+{% extends 'pub/base.html' %}
+{% load static %}
+{% block css %}
+    <style type="text/css">
+        .widget-content2 {
+            margin: 0 auto;
+            padding: 20px 15px 15px;
+
+            background-size: 100% 100%;
+            background: rgb(249, 246, 241) no-repeat;
+
+            border: 0px solid #D5D5D5;
+            mini-height: 300px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+        }
+
+        .widget-content3 {
+
+            padding: 20px;
+            text-align: center;
+            font-size: 80px;
+            display: block;
+            color: #f9f6f1;
+            min-height: 50px;
+        }
+
+        .grade {
+            font-family: "Times New Roman";
+            text-align: center;
+            font-size: 100px;
+            display: block;
+            color: #cb1a15;
+            min-height: 50px;
+        }
+
+    </style>
+{% endblock %}
+{% block login %}
+    <li class="dropdown">
+        {% if last != 99 %}
+            <a href="{% url 'showgrade' id %}" class="dropdown-toggle">
+                <i class="icon-arrow-right"></i>
+                下一步
+            </a>
+        {% endif %}
+
+    </li>
+{% endblock %}
+{% block row %}
+    <div class="span12">
+        <div class="widget">
+            <div class="widget-content3">
+                {{ emp.num }}号选手{{ emp.name }}
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="widget ">
+            <div class="widget-content2">
+                <div class="shortcuts">
+                    <h1 style="color: #e40e17; text-align: center">笔试成绩</h1>
+                    <span class="grade"> <img src="{% static 'grade.png' %}" width="90%"></span>
+                    <span class="grade">{{ emp.papergrade }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="widget ">
+            <div class="widget-content2">
+                <div class="shortcuts">
+                    <h1 style="color: #e40e17;text-align: center">业绩成绩</h1>
+
+                    <span class="grade"> <img src="{% static 'grade.png' %}" width="90%"></span>
+                    <div><span class="grade">{{ emp.ave_grade }}</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <div class="widget ">
+            <div class="widget-content2">
+                <div class="shortcuts">
+                    <h1 style="color: #e40e17;text-align: center">最终成绩</h1>
+
+                    <span class="grade"> <img src="{% static 'grade.png' %}" width="90%"></span>
+                    <span class="grade">{{ emp.totalgrade }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
